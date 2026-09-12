@@ -122,6 +122,36 @@ export const FirebaseConfigModal: React.FC<FirebaseConfigModalProps> = ({ isOpen
               </div>
             </div>
 
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 text-xs">
+              <div className="font-semibold text-slate-700 flex items-center justify-between">
+                <span>ลิงก์ไปยัง Firebase Console:</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href={`https://console.firebase.google.com/project/${projectId || 'acountdb01'}/authentication/settings`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-2.5 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg font-medium inline-flex items-center gap-1 text-[11px] border border-blue-200 transition-colors"
+                >
+                  🔗 Auth Settings (Authorized domains)
+                </a>
+                <a
+                  href={`https://console.firebase.google.com/project/${projectId || 'acountdb01'}/authentication/providers`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-2.5 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg font-medium inline-flex items-center gap-1 text-[11px] border border-indigo-200 transition-colors"
+                >
+                  🔗 Sign-in Providers (เปิด Google)
+                </a>
+              </div>
+              <div className="text-[11px] text-slate-500 pt-1 border-t border-slate-200 flex items-center justify-between">
+                <span>โดเมนปัจจุบันที่ต้องเพิ่ม:</span>
+                <code className="bg-white px-1.5 py-0.5 rounded border text-slate-700 font-mono text-[10px]">
+                  {window.location.hostname}
+                </code>
+              </div>
+            </div>
+
             {isSaved && (
               <div className="text-xs text-emerald-600 flex items-center gap-1.5 font-medium">
                 <CheckCircle2 className="w-4 h-4" /> บันทึกการตั้งค่าแล้ว ระบบจะโหลดใหม่อัตโนมัติ
