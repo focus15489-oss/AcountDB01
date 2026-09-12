@@ -37,13 +37,16 @@ export interface FirebaseConfigType {
 }
 
 const STORAGE_KEY = 'custom_firebase_config';
-export const TARGET_PROJECT_DISPLAY_NAME = 'AcountDB01';
+export const TARGET_PROJECT_DISPLAY_NAME = 'acountdb01';
 
 export const getStoredFirebaseConfig = (): FirebaseConfigType => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      if (parsed.projectId === 'acountdb01') {
+        return parsed;
+      }
     }
   } catch (e) {
     console.warn('Failed to parse stored Firebase config:', e);
@@ -96,7 +99,16 @@ export const signInWithGoogle = async () => {
     return result.user;
   } catch (error: any) {
     console.error('Google Sign In Error:', error);
-    // If popup is blocked by iframe or browser
+    if (error.code === 'auth/unauthorized-domain') {
+      throw new Error(
+        `โดเมน ${window.location.hostname} ยังไม่ได้รับอนุญาตใน Firebase Console (${TARGET_PROJECT_DISPLAY_NAME}) กรุณาเพิ่มโดเมนใน Firebase Console > Authentication > Settings > Authorized domains หรือเลือกใช้โหมดทดลองใช้งาน (Guest)`
+      );
+    }
+    if (error.code === 'auth/operation-not-allowed' || error.code === 'auth/configuration-not-found') {
+      throw new Error(
+        `ยังไม่ได้เปิดใช้งาน Google Sign-in ใน Firebase Console (${TARGET_PROJECT_DISPLAY_NAME}) กรุณาเปิดใช้งานที่ Firebase Console > Authentication > Sign-in method หรือเลือกใช้โหมดทดลองใช้งาน (Guest)`
+      );
+    }
     if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
       throw new Error('หน้าต่างล็อกอินถูกบล็อกโดยเบราว์เซอร์ กรุณาอนุญาตป็อปอัป หรือเปิดในแท็บใหม่');
     }
